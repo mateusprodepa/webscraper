@@ -3,6 +3,6 @@ const { log } = require('../utils/log');
 
 module.exports = async () => {
     // Try turning headless to true if you wanna debug.
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await puppeteer.launch({ headless: false });
     return browser;
 }

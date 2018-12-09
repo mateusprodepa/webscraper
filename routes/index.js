@@ -62,7 +62,7 @@ const searchForImages = async (url) => {
     In a 1920 x 1080 viewport browser returning about 30 images per request
     In a connection of 890 kbp/s or so... */
     
-    await page.on('request', (request) => {
+    page.on('request', (request) => {
         const requestUrl = request.url();
         const resourceType = request.resourceType();
 
@@ -77,8 +77,8 @@ const searchForImages = async (url) => {
         }
     });
 
-    await page.goto(url);
-
+    await page.goto(url, { waitUntil: 'domcontentloaded' });
+    await page.waitForNavigation({waitUntil: 'domcontentloaded'})
     // const images = await page.evaluate(() => {
     //     return Array.from(document.images, e => e.src)
     // });
@@ -121,6 +121,7 @@ const routes = [
         },
         handler: async (request, reply) => {
             const { query: imageQuery } = request.params;
+            
             if(imageQuery.isValid()) {
 
                 const image = getRandomImage(await searchForImages(baseUrl + imageQuery));
@@ -167,6 +168,7 @@ const routes = [
         },
         handler: async (request, reply) => {
             const { query: imageQuery } = request.params;
+
             if(imageQuery.isValid()) {
                 let downloaded = undefined;
                 let filename = `${imageQuery}-${_id.generate()}`
