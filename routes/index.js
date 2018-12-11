@@ -3,6 +3,7 @@ let browser;
 const https = require('https');
 const _id = require('shortid');
 const fs = require('fs');
+const path = require('path');
 
 // Configuration files -- For organization
 const pinterest = require('../config/pinterest');
@@ -93,7 +94,7 @@ In our main index.js file to set up the fastify routes and documentation */
 const routes = [
     {
         method: 'GET',
-        url: '/images/:query',
+        url: '/images/:query/:quantity',
         schema: {
             queryString: {
                 query: { type: 'string' }
@@ -104,37 +105,31 @@ const routes = [
                     query: {
                         type: 'string',
                         description: 'Parâmetro de busca da imagem.'
-                    }
-                }
-            },
-            response: {
-                200: {
-                    description: 'Sucesso da requisição.',
-                    type: 'object',
-                    properties: {
-                        image: {
-                            type: 'string'
-                        }
+                    },
+                    quantity: {
+                        type: 'number',
+                        description: 'Quantidade de imagens desejadas.'
                     }
                 }
             }
         },
         handler: async (request, reply) => {
-            const { query: imageQuery } = request.params;
+            const { query: imageQuery, quantity } = request.params;
             
             if(imageQuery.isValid()) {
+                
+                const images = !!quantity && quantity > 0 ?
+                (await searchForImages(baseUrl + imageQuery)).slice(0, quantity) :
+                [getRandomImage(await searchForImages(baseUrl + imageQuery))];
+                console.log(images);
 
-                const image = getRandomImage(await searchForImages(baseUrl + imageQuery));
+                if(images.length)
+                    reply.code(200).send({ images: images });
+                else
+                    reply.code(403).send({ error: 'Não foi possivel carregar sua imagem' });
 
-                reply
-                    .code(200)
-                    .header('Content-Type', 'application/json; charset=utf-8')
-                    .send({ image });
             } else {
-                reply
-                    .code(403)
-                    .header('Content-Type', 'application/json; charset=utf-8')
-                    .send({ error: 'Não deixe o campo de pesquisa em branco.' });
+                reply.code(403).send({ error: 'Não deixe o campo de pesquisa em branco.' });
             } // else
         } // handler
     }, // object
@@ -153,46 +148,27 @@ const routes = [
                         description: 'Parâmetro de busca da imagem.'
                     }
                 }
-            },
-            response: {
-                200: {
-                    description: 'Download da imagem realizado com sucesso.',
-                    type: 'object',
-                    properties: {
-                        status: {
-                            type: 'string'
-                        }
-                    }
-                }
             }
         },
         handler: async (request, reply) => {
             const { query: imageQuery } = request.params;
 
             if(imageQuery.isValid()) {
-                let downloaded = undefined;
+                let downloaded;
                 let filename = `${imageQuery}-${_id.generate()}`
 
                 const image = getRandomImage(await searchForImages(baseUrl + imageQuery));
+                const imagePath = path.join(__dirname, '../downloads', filename + '.jpg');
 
-                downloaded = await download(image, `./downloads/${filename}.jpg`);
+                downloaded = await download(image, imagePath);
 
-                if(downloaded) {
-                    reply
-                        .code(200)
-                        .header('Content-Type', 'application/json; charset=utf-8')
-                        .send({ status: 'Imagem baixada com sucesso.' });
-                } else {
-                    reply
-                        .code(403)
-                        .header('Content-Type', 'application/json; charset=utf-8')
-                        .send({ error: 'Não foi possível baixar a imagem' });
-                }
+                if (downloaded)
+                    reply.code(200).send({ status: ('Download da imagem efetuado com sucesso em ' + imagePath) });
+                else 
+                    reply.code(403).send({ error: 'Não foi possível baixar a imagem' });
+
             } else {
-                reply
-                    .code(403)
-                    .header('Content-Type', 'application/json; charset=utf-8')
-                    .send({ error: 'Não deixe o campo de pesquisa em branco.' });
+                reply.code(403).send({ error: 'Não deixe o campo de pesquisa em branco.' });
             } // else
         } // handler
     } // object
