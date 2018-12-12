@@ -57,12 +57,12 @@ const searchForImages = async (url) => {
 
     // Uncomment only for debugging purposes.
     // await page.on('console', msg => console.log('PAGE LOG:', msg.text()));
-    
+
     /* We're actually just ignoring all the CSS from the page
     To improve the load speed. -- That reduces the load time for about 10 seconds
     In a 1920 x 1080 viewport browser returning about 30 images per request
     In a connection of 890 kbp/s or so... */
-    
+
     page.on('request', (request) => {
         const requestUrl = request.url();
         const resourceType = request.resourceType();
@@ -115,13 +115,12 @@ const routes = [
         },
         handler: async (request, reply) => {
             const { query: imageQuery, quantity } = request.params;
-            
+
             if(imageQuery.isValid()) {
-                
+
                 const images = !!quantity && quantity > 0 ?
                 (await searchForImages(baseUrl + imageQuery)).slice(0, quantity) :
                 [getRandomImage(await searchForImages(baseUrl + imageQuery))];
-                console.log(images);
 
                 if(images.length)
                     reply.code(200).send({ images: images });
@@ -164,7 +163,7 @@ const routes = [
 
                 if (downloaded)
                     reply.code(200).send({ status: ('Download da imagem efetuado com sucesso em ' + imagePath) });
-                else 
+                else
                     reply.code(403).send({ error: 'Não foi possível baixar a imagem' });
 
             } else {

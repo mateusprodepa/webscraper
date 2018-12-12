@@ -23,7 +23,7 @@ const start = async () => {
             return log('error', err);
             process.exit(1);
         }
-        
+
         log('info', `Servidor rodando em ${address}`, true);
     });
 
