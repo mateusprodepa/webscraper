@@ -1,29 +1,12 @@
-import React, { Component } from 'react'
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { createBottomTabNavigator, createAppContainer } from 'react-navigation'
-import { View, Text } from 'react-native'
+import React, { Component } from "react"
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { createBottomTabNavigator, createAppContainer } from "react-navigation"
+import { View, Text } from "react-native"
 
 // Screens
+import HomeScreen from '../screens/HomeScreen';
+import GalleryScreen from '../screens/GalleryScreen';
 
-class HomeScreen extends React.Component {
-  render() {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Home!</Text>
-      </View>
-    );
-  }
-}
-
-class GalleryScreen extends React.Component {
-  render() {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Galeria!</Text>
-      </View>
-    );
-  }
-}
 
 const TabNavigator = createBottomTabNavigator(
   {
@@ -33,21 +16,30 @@ const TabNavigator = createBottomTabNavigator(
   {
     defaultNavigationOptions: ({ navigation }) => ({
       tabBarIcon: ({ focused, horizontal, tintColor }) => {
-        const { routeName } = navigation.state
-        let iconName
 
-        if(routeName === 'Home') {
-          iconName = `ios-home${focused ? '' : '-outline'}`
-        } else if(routeName === 'Gallery') {
-          iconName = `ios-images${focused ? '' : '-outline'}`
+        const { routeName } = navigation.state;
+
+        let iconName;
+
+        if(routeName === "Home") {
+          iconName = `ios-home`
+        } else if(routeName === "Gallery") {
+          iconName = `ios-images`
         }
 
         return <Ionicons name={iconName} size={horizontal ? 20 : 25} color={tintColor} />
       }
     }),
     tabBarOptions: {
-      activeTintColor: '#F74D4D',
-      inactiveTintColor: '#CCCCCC'
+      activeTintColor: "#7FCFCF",
+      inactiveTintColor: "#FFFFFF",
+      labelStyle: {
+        // fontSize: 12,
+        marginBottom: 4
+      },
+      style: {
+        backgroundColor: '#086C6C'
+      }
     }
   }
 )

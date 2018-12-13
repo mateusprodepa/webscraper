@@ -7,7 +7,6 @@ import {
   Dimensions,
 } from 'react-native';
 import { Input, Button } from 'react-native-elements';
-
 import { Font } from 'expo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -17,17 +16,14 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 const BG_IMAGE = require('../../assets/images/dark-bg.jpg');
 
 export default class LoginScreen extends Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      fontLoaded: false,
-      email: '',
-      email_valid: true,
-      password: '',
-      login_failed: false,
-      showLoading: false,
-    };
+  state = {
+    fontLoaded: false,
+    email: '',
+    email_valid: true,
+    password: '',
+    login_failed: false,
+    showLoading: false,
   }
 
   async componentDidMount() {
@@ -65,11 +61,11 @@ export default class LoginScreen extends Component {
             <View style={styles.loginView}>
               <View style={styles.loginTitle}>
                 <View style={{ flexDirection: 'row' }}>
-                  <Text style={styles.travelText}>TRAVEL</Text>
-                  <Text style={styles.plusText}>+</Text>
+                  <Text style={styles.travelText}>IMAGENS</Text>
+                  {/* <Text style={styles.plusText}>+</Text> */}
                 </View>
                 <View style={{ marginTop: -10 }}>
-                  <Text style={styles.travelText}>LEISURE</Text>
+                  <Text style={styles.travelText}>SEI LÁ</Text>
                 </View>
               </View>
               <View style={styles.loginInput}>
@@ -84,7 +80,7 @@ export default class LoginScreen extends Component {
                   containerStyle={{ marginVertical: 10 }}
                   onChangeText={email => this.setState({ email })}
                   value={email}
-                  inputStyle={{ marginLeft: 10, color: 'white' }}
+                  inputStyle={{ marginLeft: 10, color: 'white', fontSize: 12 }}
                   keyboardAppearance="light"
                   placeholder="Email"
                   autoFocus={false}
@@ -101,7 +97,7 @@ export default class LoginScreen extends Component {
                   placeholderTextColor="white"
                   errorStyle={{ textAlign: 'center', fontSize: 12 }}
                   errorMessage={
-                    email_valid ? '' : 'Please enter a valid email address'
+                    email_valid ? null : 'Please enter a valid email address'
                   }
                 />
                 <Input
@@ -115,10 +111,10 @@ export default class LoginScreen extends Component {
                   containerStyle={{ marginVertical: 10 }}
                   onChangeText={password => this.setState({ password })}
                   value={password}
-                  inputStyle={{ marginLeft: 10, color: 'white' }}
+                  inputStyle={{ marginLeft: 10, color: 'white', fontSize: 12 }}
                   secureTextEntry={true}
                   keyboardAppearance="light"
-                  placeholder="Password"
+                  placeholder="Senha"
                   autoCapitalize="none"
                   autoCorrect={false}
                   keyboardType="default"
@@ -148,9 +144,9 @@ export default class LoginScreen extends Component {
                 titleStyle={{ fontWeight: 'bold', color: 'white' }}
               />
               <View style={styles.footerView}>
-                <Text style={{ color: 'grey' }}>New here?</Text>
+                <Text style={{ color: '#F5F5F5' }}>Novo por aqui?</Text>
                 <Button
-                  title="Create an Account"
+                  title="Crie sua conta"
                   clear
                   activeOpacity={0.5}
                   titleStyle={{ color: 'white', fontSize: 15 }}
@@ -159,9 +155,7 @@ export default class LoginScreen extends Component {
                 />
               </View>
             </View>
-          ) : (
-            <Text>Loading...</Text>
-          )}
+          ) : <Text>Loading...</Text>}
         </ImageBackground>
       </View>
     );
@@ -182,10 +176,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loginView: {
-    marginTop: 150,
-    backgroundColor: 'transparent',
-    width: 250,
+    padding: 8,
+    // marginTop: ,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    width: 300,
     height: 400,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 5
   },
   loginTitle: {
     flex: 1,
@@ -206,6 +204,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    width: '100%'
   },
   footerView: {
     marginTop: 20,
