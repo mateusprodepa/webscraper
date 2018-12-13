@@ -1,36 +1,25 @@
-// Configs
-const swagger = require('./config/swagger');
-const bodyParser = require('body-parser');
-
-// Utils
 const { log, loadLogger } = require('./utils/log');
-
 const logger = loadLogger(true);
-const fastify = require('fastify')( logger );
+const express = require('express');
+const mongoose = require('mongoose');
+const pino = require('express-pino-logger')(logger);
+const connection = mongoose.connect('mongodb://localhost/PinScrapper', {
+    useNewUrlParser: true
+});
+// const swagger = require('./config/swagger');
+const app = express();
+
+const imagesRoute = require('./routes/images');
+const downloadImageRoute = require('./routes/downloadImage');
 
 const port = process.env.PORT || 3000;
 
-require('./routes').forEach(route => fastify.route(route));
-fastify.register(require('fastify-swagger'), swagger.options);
-fastify.use(bodyParser.json({ limit: '50mb' }));
-fastify.use(bodyParser.urlencoded({ extended: false }));
+// app.register(require('fastify-swagger'), swagger.options);
 
-const start = async () => {
+app.use(pino);
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: false }));
+app.use('/images', imagesRoute);
+app.use('/download', downloadImageRoute);
 
-    fastify.listen(port, (err, address) => {
-
-        if(err) {
-            return log('error', err);
-            process.exit(1);
-        }
-
-        log('info', `Servidor rodando em ${address}`, true);
-    });
-
-}
-
-fastify.ready().then(() => {
-    fastify.swagger();
-});
-
-start();
+app.listen(port, () => console.info(`[x] => Servidor rodando na porta ${port}`));

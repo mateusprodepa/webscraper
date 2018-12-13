@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 
-const reducer = combineReducers(() => {});
+const reducer = combineReducers({});
 
 const rootReducer = (state, action) => {
   if (action.type === 'USER_LOGOUT_RESET_STORE') {
