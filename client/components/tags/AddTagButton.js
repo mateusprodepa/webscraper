@@ -17,7 +17,7 @@ const AddTagButton = () => {
                 height: 50,
                 width: 300,
                 backgroundColor: '#7FCFCF',
-                borderRadius: 50,
+                // borderRadius: 50,
             }}
             containerStyle={{ marginVertical: 10 }}
             titleStyle={{ fontWeight: 'bold', color: 'white' }}

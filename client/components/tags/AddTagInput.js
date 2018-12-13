@@ -17,7 +17,7 @@ const AddTagInput = () => {
                     textAlign: 'center',
                     flex: 1,
                     marginRight: 11,
-                    borderRadius: 50
+                    borderRadius: 5
                 }}
                 inputContainerStyle={{
                     borderBottomWidth: 0,

@@ -35,7 +35,8 @@ const TagsContainer = ({ tags }) => {
 const styles = StyleSheet.create({
     bgImage: {
         borderWidth: 0,
-        borderColor: 'transparent'
+        borderColor: 'transparent',
+        borderRadius: 5,
     },
     overlay: {
         position: 'absolute',
@@ -43,26 +44,30 @@ const styles = StyleSheet.create({
         left: 0,
         width: '100%',
         height: '100%',
-        backgroundColor: 'rgba(0, 0, 0, 0.3)'
+        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+        borderRadius: 5,
     },
     tag: {
         color: '#FFFFFF',
-        fontSize: 19,
+        fontSize: 17,
         fontFamily: 'bold',
         textAlign: 'center',
-        textTransform: 'capitalize'
+        textTransform: 'capitalize',
+        padding: 8,
     },
     tagContainer: {
         flex: 1,
+        flexDirection: 'column',
         height: 155,
         minWidth: '30%',
         backgroundColor: '#F5F5F5',
         margin: 4,
         marginRight: 9,
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: 'flex-end',
+        alignItems: 'flex-end',
         position: 'relative',
-        marginBottom: 10
+        marginBottom: 10,
+        borderRadius: 5,
     },
     scrollContainer: {
         flex: 1,
